@@ -1,0 +1,8 @@
+\.git
+\.site
+\.build.yml
+\.archive
+guix
+fonts
+^/.*\.org
+LICENSE

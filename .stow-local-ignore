@@ -1,0 +1,6 @@
+\.git
+\.files
+\.archive
+guix
+^/.*\.org
+LICENSE
