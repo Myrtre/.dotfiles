@@ -1,0 +1,14 @@
+# ' Makes works other places
+xhost -SI:localuser:$USER
+
+
+# ' Fallback Pointer
+xsetroot -cursor_name left_ptr
+
+# ' Fix Scrolling some GTK3 Applications
+export GDK_CORE_DEVICE_EVENTS=1
+
+
+autorandr -l home
+
+exec stumpwm

@@ -100,6 +100,7 @@
 	xinput
 	xrdb
 	xrandr
+	xinit
 	xclip              ;;|--> gnu packages xdisorg
 	xsel
 	xss-lock))
@@ -211,7 +212,7 @@
  (locale "en_US.utf8")
  (timezone "Europe/Budapest")
  (keyboard-layout %keyboard-layout)
- (host-name "jottunheim")
+ (host-name "jotunheim")
 
  (users (append
 	 %davy-user-account
