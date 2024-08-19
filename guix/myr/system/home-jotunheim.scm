@@ -5,6 +5,7 @@
 	     (gnu home services desktop)
 	     (gnu home services sound)
 	     (gnu home services shells)
+	     (gnu home services gnupg)
 	     (guix gexp)
 	     (guix transformations))
 
@@ -59,6 +60,8 @@
 	unzip
 	git             ;;|--> gnu packages version-control
 	gnupg           ;;|--> gnu packages gnupg
+	pinentry
+	pinentry-tty
 	isync           ;;|--> gnu packages mail
 	msmtp
 	mu
@@ -84,6 +87,11 @@
  (services
   (list (service home-dbus-service-type)
 	(service home-pipewire-service-type)
+	(service home-gpg-agent-service-type
+		 (home-gpg-agent-configuration
+		  (pinentry-program
+		   (file-append pinentry-tty "/bin/pinentry-tty"))
+		  (ssh-support? #t)))
 	(service home-x11-service-type)
 	(simple-service 'env-vars home-environment-variables-service-type
 			'(("EDITOR" . "emacs")

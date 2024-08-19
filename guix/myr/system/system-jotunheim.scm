@@ -150,7 +150,6 @@
 		  (cups-configuration
 		   (web-interface? #t)
 		   (default-paper-size "Letter")))
-
 	 ;;(service network-manager-service-type)
 	 ;;(service wpa-supplicant-service-type)
 	 ;;(service modem-manager-service-type)
