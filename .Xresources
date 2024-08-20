@@ -1,0 +1,12 @@
+! -*- conf-xresources -*-
+! Xresources - X11 Environment Configuration
+
+! Cursor
+Xcursor.siz: 22
+
+! XTerm?
+! Set default UI font (menu)
+XTerm*XftFont: Hermit:size=11:antialias=true:style=Regular
+! Set Terminal Font
+XTerm*vt100.faceName: Hermit:size=11:antialias=true:style=Regular
+XTerm*vt100.boldFont: Hermit:size=11:antialias=true:style=Bold

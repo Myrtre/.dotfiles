@@ -6,17 +6,16 @@
 	     (gnu home services sound)
 	     (gnu home services shells)
 	     (gnu home services gnupg)
+	     (gnu home services xdg)
 	     (guix gexp)
 	     (guix transformations))
-
-
 
 (use-package-modules fonts web-browsers gnuzilla gnupg mail pulseaudio
 		     gstreamer compton image-viewers linux music kde
 		     gimp inkscape graphics compression version-control
 		     guile guile-xyz emacs emacs-xyz audio video rust-apps
-		     gnome gnome-xyz kde-frameworks
-		     curl wget ssh)
+		     gnome gnome-xyz kde-frameworks freedesktop
+		     curl wget ssh glib)
 
 (define %font-packages
   (list font-hermit        ;;|--> gnu packages fonts
@@ -42,7 +41,8 @@
 	mpv              ;;|--> gnu packages video :apps
 	mpv-mpris
 	playerctl        ;;|--> gnu packages music
-	sxiv))           ;;|--> gnu packages image-viewer
+	feh              ;;|--> gnu packages image-viewer
+	sxiv))           
 
 (define %editor-packages
   (list gimp-next       ;;|--> gnu packages gimp
@@ -78,12 +78,19 @@
 	emacs              ;;|--> gnu packages emacs
 	emacs-next-pgtk))
 
+(define %xdg-packages
+  (list xdg-desktop-portal
+	xdg-utils
+	xdg-dbus-proxy
+	shared-mime-info))
+
 (home-environment
  (packages (append %media-packages
 		   %editor-packages
 		   %general-packages
 		   %appearance-packages
-		   %emacs-packages))
+		   %emacs-packages
+		   %xdg-packages))
  (services
   (list (service home-dbus-service-type)
 	(service home-pipewire-service-type)
@@ -99,8 +106,17 @@
 			  ("XDG_SESSION_TYPE" . "x11")
 			  ("XDG_SESSION_DESKTOP" . "stumpwm")
 			  ("XDG_CURRENT_DESKTOP" . "stumpwm")
-			  ("XDG_DOWNLOAD_DIR" . "~/downloads")
 			  ("XDG_CACHE_DIR" . "~/.cache")))
+	(simple-service 'xdg-usr-dirs home-xdg-user-directories-service-type
+			(home-xdg-user-directories-configuration
+			 (desktop      "$HOME/desktop")
+			 (documents    "$HOME/docs")
+			 (pictures     "$HOME/pics")
+			 (videos       "$HOME/vids")
+			 (templates    "$HOME/temp")
+			 (music        "$HOME/music")
+			 (publicshare  "$HOME" )
+			 (download     "$HOME/downloads")))
 	(service home-bash-service-type
 		 (home-bash-configuration
 		  (guix-defaults? #f)

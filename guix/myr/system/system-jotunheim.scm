@@ -80,6 +80,7 @@
 	sbcl-bordeaux-threads
 	sbcl-cl-fad
 	sbcl-clx-truetype
+	sbcl-alexandria
 	stumpwm+slynk          ;;|--> gnu packages wm
 	sbcl-stumpwm-ttf-fonts ;;:stumpwm-contrib/utils
 	sbcl-stumpwm-kbd-layouts
@@ -95,10 +96,12 @@
 	font-jetbrains-mono
 	xterm               ;;|--> gnu packages xorg
 	transset
+	setxkbmap
 	xhost
 	xsetroot
 	xinput
 	xrdb
+	xset
 	xrandr
 	xinit
 	xclip              ;;|--> gnu packages xdisorg
@@ -138,6 +141,7 @@
 
 (define %system-services
   (cons* (service nix-service-type)
+	 
 	 ;;(service elogind-service-type)
 	 (service screen-locker-service-type
 		  (screen-locker-configuration
@@ -188,6 +192,9 @@
 	 
 	 ;;(service x11-socket-directory-service-type)
 	 (service xorg-server-service-type)
+	 ;(set-xorg-configuration
+	 ; (xorg-configuration
+	 ;  (keyboard-layout %keyboard-layout)))
 	 
 	 (service openssh-service-type)
 	 (modify-services %desktop-services
@@ -198,7 +205,14 @@
 			  (guix-service-type
 			   config =>
 			   (substitutes->services config)))))
-	     
+
+(define %etc-sudoers
+  (plain-file "etc-sudoers-config"
+	      "Defaults timestamp_timeout=480
+root      ALL=(ALL) ALL
+%wheel    ALL=(ALL) ALL
+davy      ALL=(ALL) NOPASSWD:/run/current-system/profile/bin/chvt,/run/current-system/profile/bin/loginctl"))
+
 (operating-system
  (kernel linux-6.10)
  (initrd microcode-initrd)
@@ -240,5 +254,5 @@
 	    %base-packages))
 
  (services %system-services)
- 
+ (sudoers-file %etc-sudoers)
  (name-service-switch %mdns-host-lookup-nss))

@@ -11,7 +11,8 @@
 
 
 ;; UI
-;; Wallpaper?
+;; Wallpaper
+(run-shell-command "feh --bg-scale ~/.dotfiles/themes/bg/wallhaven-498e2w.png")
 
 ;; Screen Compositor
 (run-shell-command "picom")

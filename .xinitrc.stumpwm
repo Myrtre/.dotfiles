@@ -1,6 +1,10 @@
+#!/bin/sh
+
+# Set keyboard Layout to HUngarian
+setxkbmap hu
+
 # ' Makes works other places
 xhost -SI:localuser:$USER
-
 
 # ' Fallback Pointer
 xsetroot -cursor_name left_ptr
@@ -8,7 +12,14 @@ xsetroot -cursor_name left_ptr
 # ' Fix Scrolling some GTK3 Applications
 export GDK_CORE_DEVICE_EVENTS=1
 
+# Keyboar repeat rate
+xset -r rate 200 60
+
+# Fonts
+fc-cache -rv
 
 autorandr -l home
 
-exec stumpwm
+
+
+dbus-run-session stumpwm
