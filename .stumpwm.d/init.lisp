@@ -6,14 +6,24 @@
     (load quicklisp-init)))
 
 (in-package :stumpwm)
-(setf *default-package* :stumpwm)
 
+(declaim (optimize (speed 3) (safety 3)))
 
-(defconstant +guix-system-path+ "/run/current-system/profile/share"
+;; Define guix profiles
+(defconstant +guix-system-path+ "/run/current-system/profile/share/"
   "Define Guix System profile PATH")
-
-(defconstant +guix-home-path+ "/home/davy/.guix-home/profile/share"
+(defconstant +guix-home-path+ "/home/davy/.guix-home/profile/share/"
   "Define Guix Home profile PATH")
+(defconstant +guix-profile+ "/home/davy/.guix-profile/share/"
+  "Define Guix Profile PATH")
+
+;; Set PATHs for guix-modules
+(set-module-dir (concat +guix-system-path+
+			"common-lisp/sbcl/"))
+
+(setf *default-package* :stumpwm)
+(setf *data-dir* (concat (getenv "HOME")
+			 "~/.stumpwm.d/data/"))
 
 (setf *startup-message* nil)
 
@@ -25,22 +35,33 @@
 (load "~/.stumpwm.d/modules/auto-start.lisp")
 
 ;; Load ./modules
-;; [ bluetooth commands utilites placement keybindings theme modeline (auto-start) ]
-(stumpwm:add-to-load-path "~/.stumpwm.d/modules")
+;; [ bluetooth commands utilites frame keybindings theme modeline (auto-start) ]
+;; - (stumpwm:add-to-load-path "~/.stumpwm.d/modules")
 
+(load "~/.stumpwm.d/modules/colors.lisp")
+(load "~/.stumpwm.d/modules/theme.lisp")
+(load "~/.stumpwm.d/modules/frames.lisp")
+(load "~/.stumpwm.d/modules/keybindings.lisp")
+(load "~/.stumpwm.d/modules/modeline.lisp")
 
-(setf *mouse-focus-policy* :click
+;; Start Mode-line
+(when *initializing*
+  (mode-line))
+
+(setf *mouse-focus-policy*    :click
       *float-window-modifier* :SUPER)
 
-;; Navigate between windows from all workspaces
 (load-module "globalwindows")
 
 ;; Additional XOrg Resource + Runs
 (run-shell-command "xrdb -merge ~/.Xresources")
 
-(when *initializing*
-  (mode-line))
+(require :slynk)
+(sb-thread:make-thread
+ (lambda () (slynk:create-server :port 4005 :dont-close t)))
 
+
+;; Welcome
 (setf *startup-message*
-      (concatenate 'string "^2*Welcome ^BDavy^b! "
-		   "Your ^BStumpWM^b session is ready..."))
+      (concatenate 'string "^2Welcome ^BDavy^b! "
+		   "Your ^BStumpWM^b session is ready."))
